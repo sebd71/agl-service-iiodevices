@@ -58,6 +58,13 @@ static struct client_sub * clients = NULL;
 /*save last registered client*/
 static struct client_sub * last_client = NULL;
 
+/* Static definition of supported iiodevices */
+static struct iio_info iio_infos[] = {
+ { "16-001d", "acceleration", "accel"},
+ { "16-001d", "gyroscope", "magn"},
+ { "16-006b", "compass", "anglvel"}
+};
+
 /*get event by afb_event*/
 static struct event *event_get_event(const struct afb_event *event)
 {
@@ -397,7 +404,7 @@ static struct channels* set_channel(
     chn->iioelts = i;
 
     /*set channel name with iio_elements*/
-    strncpy(chn->name, client->infos->id, PATH_MAX);
+    strncpy(chn->name, client->infos->middlename, PATH_MAX);
     set_channel_name(chn->name, i);
 
     if(!(chn->chn = iio_device_find_channel(client->dev, chn->name, false))) {

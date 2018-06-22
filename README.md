@@ -16,16 +16,16 @@ subscription.
 
 | Name               | Description                                 | JSON Parameters                                                   |
 |:-------------------|:--------------------------------------------|:---------------------------------------------------------------   |
-| subscribe          | subscribe to 9 axis events                  | *Request:* {"event": "accel", "args":"xy", "frequency": "10" }|
-| unsubscribe        | unsubscribe to accelero events              | *Request:* {"event": "accel" } |
+| subscribe          | subscribe to 9 axis events                  | *Request:* {"event": "acceleration", "args":"xy", "frequency": "10" }|
+| unsubscribe        | unsubscribe to accelero events              | *Request:* {"event": "acceleration" } |
 
 ## Events
 
 For now, there are 3 different events matching with the different available sensors.
 
-* "accel": is for acceleration data
-* "magn": is for gyroscope data
-* "anglvel": is for electronic compass data
+* "acceleration": is for acceleration data
+* "gyroscope": is for gyroscope data
+* "compass": is for electronic compass data
 
 ## Frequency
 
