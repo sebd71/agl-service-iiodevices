@@ -70,7 +70,8 @@ set (PKG_REQUIRED_LIST
 	libsystemd>=222
 	glib-2.0
 	gobject-2.0
-    libiio
+	libiio
+	afb-daemon>=4.0
 )
 
 # Static constante definition
