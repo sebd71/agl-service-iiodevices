@@ -1,0 +1,8 @@
+build*
+nbproject/private
+.vscode
+.stfolder
+.*.sw*
+*.tar.gz
+__*
+htdocs/node_modules
