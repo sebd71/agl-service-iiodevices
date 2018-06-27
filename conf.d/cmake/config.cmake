@@ -114,7 +114,7 @@ set(WIDGET_TYPE application/vnd.agl.service)
 # This is the file that will be executed, loaded,
 # at launch time by the application framework.
 #
-set(WIDGET_ENTRY_POINT lib/libafm-radio-binding.so)
+set(WIDGET_ENTRY_POINT lib/iiodevices-binding.so)
 
 # Print a helper message when every thing is finished
 # ----------------------------------------------------
