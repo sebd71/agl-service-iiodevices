@@ -13,7 +13,7 @@
 	</feature>
 
 	<feature name="urn:AGL:widget:provided-api">
-		<param name="radio" value="ws" />
+		<param name="iiodevices" value="ws" />
 	</feature>
 
 	<feature name="urn:AGL:widget:required-api">
