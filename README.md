@@ -31,12 +31,50 @@ For now, there are 3 different events matching with the different available sens
 
 The frequency is in Hertz, if the frequency is not set, events are triggered via a file descriptor.
 
+## Client Demo example
+
+Here is an example to show how to get data from iiodevices with the demo client.
+
+### Launch afb-client-demo
+
+First, launch the client demo with right port and right TOKEN, the example below
+matches with ff(6.x) AGL version.
+
+``` bash
+afb-client-demo ws://localhost:1055/api?token=HELLO
+```
+
+### Subscribe to acceleration
+
+Here is a list of different examples to subscribe to acceleration data.
+
+#### Subscribe to acceleration with x,y and z axis with a frequency of 0.1 Hz
+
+``` bash
+iiodevices subscribe { "event": "acceleration",  "args": "xyz", "frequency": "0.1" }
+```
+
+#### Subscribe to acceleration with x and z axis
+
+``` bash
+iiodevices subscribe { "event": "acceleration",  "args": "xz" }
+```
+
+Events will be sent each time a new value is available (sent by iiodevice).
+
+### Unsubscribe to acceleration
+
+``` bash
+iiodevices unsubscribe { "event": "acceleration" }
+```
+
 ## Remaining issues
 
-- Provide a json config file so that it configures the device name and the channel name.
+- Provide a json file to configure the device name and the channel name.
 - Handle several values simultaneously, see triggers.
-- Update it to other iiodevices.
-- only read channel values at the maximum frequency.
+- Update this binding for other iiodevices.
+- Only read channel values at the maximum frequency.
+- Change args values into json arrays.
 
 ## M3ULCB Kingfisher
 
