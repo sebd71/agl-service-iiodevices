@@ -16,7 +16,7 @@
         "action": "lua://AFT#_launch_test",
         "args": {
             "trace": "iiodevices",
-            "files": ["iiodevices_BasicAPITest.lua"]
+            "files": ["iiodevices_BasicAPITest-devices.lua", "iiodevices_BasicAPITest.lua"]
         }
     }
 }

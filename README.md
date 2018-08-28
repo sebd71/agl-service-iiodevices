@@ -81,3 +81,20 @@ iiodevices unsubscribe { "event": "acceleration" }
 M3ULCB Kingfisher is equipped with a 9 axis sensor device (LSM9DS0) and the R-Car Starter
 Kit can read sensor values via I2C interface and iiodevices are provided for
 these sensors.
+
+## Tests dependencies
+
+### Kernel modules
+
+To use industrial I/O dummy device we need to load kernel modules :
+
+* industrialio
+* industrialio-configfs
+* industrialio-sw-device
+* industrialio-sw-trigger
+* iio-trig-hrtimer
+* iio_dummy
+
+[documentation](https://github.com/analogdevicesinc/libiio/blob/master/examples/dummy-iiostream.c)
+
+[recipe](https://gerrit.automotivelinux.org/gerrit/gitweb?p=AGL/meta-agl.git;a=blob_plain;f=meta-agl-bsp/recipes-kernel/linux/linux-agl.inc)

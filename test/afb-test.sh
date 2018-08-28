@@ -14,7 +14,7 @@ export AFT_PLUGIN_PATH="${TESTPACKAGEDIR}/var:${TESTPACKAGEDIR}/lib/plugins"
 
 pkill $PROCNAME
 
-timeout -s 9 10	 ${BINDER} 	--name="${PROCNAME}" \
+timeout -s 9 10	 "${BINDER}" 	--name="${PROCNAME}" \
 				--port="${PORT}" \
 				--roothttp=. \
 				--tracereq=common \
@@ -27,5 +27,3 @@ timeout -s 9 10	 ${BINDER} 	--name="${PROCNAME}" \
 				-vvv > "${LOGFILE}" 2>&1
 
 find "${BUILDDIR}" -name test_results.log -exec cat {} \;
-
-

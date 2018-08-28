@@ -19,13 +19,12 @@
 ##################################################
 # Iiodevices test configuration files
 ##################################################
-PROJECT_TARGET_ADD(afb-test-config)
+PROJECT_TARGET_ADD(data-files)
 
-	file(GLOB CONF_FILES "*.json")
-
-	add_input_files("${CONF_FILES}")
+	file(GLOB DATA_FILES "*.json" "*.sh")
+	add_input_files("${DATA_FILES}")
 
 	SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES
-	LABELS "TEST-CONFIG"
+	LABELS "TEST-DATA"
 	OUTPUT_NAME ${TARGET_NAME}
 	)
