@@ -21,10 +21,11 @@
 local testPrefix ="iiodevices_BasicAPITest_without_devices_"
 
 -- This tests the 'subscribe' verb of the iiodevices API without any devices
-_AFT.testVerbStatusError(testPrefix.."subscribe-acceleration","iiodevices","subscribe", {event = "acceleration", args = "xy"})
 _AFT.testVerbStatusError(testPrefix.."subscribe-compass","iiodevices","subscribe", {event = "compass", args = "xy"})
 _AFT.testVerbStatusError(testPrefix.."subscribe-gyroscope","iiodevices","subscribe", {event = "gyroscope", args = "xy"})
+_AFT.testVerbStatusError(testPrefix.."subscribe-acceleration","iiodevices","subscribe", {event = "acceleration", args = "abc"})
 
+_AFT.testVerbStatusError(testPrefix.."subscribe-acceleration-with-wrong-argument","iiodevices","subscribe", {event = "acceleration", args = "abc"})
 _AFT.testVerbStatusError(testPrefix.."subscribe-acceleration-with-wrong-argument","iiodevices","subscribe", {event = "acceleration", aaaaaaaaaaaaaaaaaaaaa = "xy"})
 _AFT.testVerbStatusError(testPrefix.."subscribe-compass-with-wrong-argument","iiodevices","subscribe", {event = "compass", bbbbbbbbbbbbbbbb = "xy"})
 _AFT.testVerbStatusError(testPrefix.."subscribe-gyroscope-with-wrong-argument","iiodevices","subscribe", {event = "gyroscope", cccccccccccccccccc = "xy"})

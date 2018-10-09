@@ -162,7 +162,7 @@ static void init_dev(struct client_sub *client)
 static int read_infos(struct client_sub* client)
 {
     if(!client || !client->channels || !client->channels->chn) {
-        AFB_ERROR("client=%p or client->channels=%p or client->channels->chn=%p is null", client, client->channels, client->channels->chn);
+        AFB_ERROR("client or client->channels or client->channels->chn is null");
         return -1;
     }
     json_object *jobject = NULL;
@@ -369,6 +369,10 @@ static void init_event_io(struct client_sub *client)
         AFB_ERROR("client is null");
         return;
     }
+    if(!client->channels) {
+        AFB_ERROR("channel is null");
+        return;
+    }
     read_infos(client); //get unchanged infos
     sd_event_source *source = NULL;
     if(client->u_period <= 0) { //no given frequency
@@ -409,7 +413,9 @@ static struct channels* set_channel(
 
     if(!(chn->chn = iio_device_find_channel(client->dev, chn->name, false))) {
         AFB_ERROR("cannot find %s channel", chn->name);
-        return NULL;
+        free(chn);
+        prev_chn->next = NULL;
+        return prev_chn;
     }
     iio_channel_enable(chn->chn);
     return chn;
@@ -530,13 +536,26 @@ static void subscribe(struct afb_req request)
 
             uint64_t u_period = get_period(freq);
             enum iio_elements iioelts = (int)treat_iio_elts(s_iioelts);
+            if(iioelts == 0){
+                afb_req_fail(request, "failed", "wrong args");
+                return;
+            }
             struct client_sub* client = is_new_client_sub_needed(&iio_infos[i],
                     u_period, &iioelts);
             if(!client || iioelts > 0) { //no client found or new channels
                 if(!client)
                     client = add_new_client(&iio_infos[i], iioelts, u_period);
                 init_dev(client);
+                if(!client->dev) {
+                    deinit_client_sub(client);
+                    afb_req_fail_f(request, "failed", "No %s device found", client->infos->dev_name);
+                    return;
+                }
                 init_channel(client, iioelts);
+                if(!client->channels) {
+                    afb_req_fail(request, "failed", "No channels found");
+                    return;
+                }
                 init_event_io(client);
             }
             //stored client in order to be get in unsubscription
