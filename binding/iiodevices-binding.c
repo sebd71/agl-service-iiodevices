@@ -91,7 +91,7 @@ static struct afb_event* event_add(const char *tag)
 
 	/* check valid tag */
 	e = event_get(tag);
-	if (e) return NULL;
+	if (e) return &e->event;
 
 	/* creation */
 	e = malloc(strlen(tag) + sizeof *e);
@@ -148,8 +148,6 @@ static void init_dev(struct client_sub *client)
         return;
     }
 
-    if(!ctx)
-        init_context();
     AFB_DEBUG("iio_context_find_device %s", client->infos->dev_name);
     client->dev =  iio_context_find_device(ctx, client->infos->dev_name);
     if(!client->dev) {
@@ -452,7 +450,7 @@ static uint64_t get_period(const char* freq)
     double frequency = 0;
     if(freq)
         frequency = strtod(freq, NULL);
-    return (frequency == 0) ? 0 : (uint64_t)((1.0 / frequency) * 1000000);
+    return (frequency <= 0) ? 0 : (uint64_t)((1.0 / frequency) * 1000000);
 }
 
 /*check if it is needed to create a new client: if NULL return it is needed,
@@ -517,8 +515,13 @@ static struct client_sub *add_new_client(struct iio_info *infos,
 /*subscribe verb*/
 static void subscribe(struct afb_req request)
 {
+    init_context();
     const char *value = afb_req_value(request, "event");
     const char *s_iioelts = afb_req_value(request, "args");
+    if(!s_iioelts) {
+        afb_req_fail(request, "failed", "args is null");
+        return;
+    }
     const char *freq = afb_req_value(request, "frequency");
 
     if(!value || !s_iioelts) {
@@ -557,10 +560,16 @@ static void subscribe(struct afb_req request)
                     return;
                 }
                 init_event_io(client);
+            } else {
+                init_dev(client);
             }
             //stored client in order to be get in unsubscription
             afb_req_context_set(request, client, NULL);
 
+            if(!client->event) {
+                    afb_req_fail(request, "failed", "No event found");
+                    return;
+            }
             if(afb_req_subscribe(request, *client->event) != 0) {
                 afb_req_fail(request, "failed", "subscription failed");
                 return;
@@ -577,6 +586,7 @@ static void subscribe(struct afb_req request)
 /*unsubscribe verb*/
 static void unsubscribe(struct afb_req request)
 {
+    init_context();
     const char *value = afb_req_value(request, "event");
     if(!value) {
         afb_req_fail(request, "failed", "please, fill 'event' fields");
@@ -592,6 +602,8 @@ static void unsubscribe(struct afb_req request)
                     = (struct client_sub *)afb_req_context_get(request);
                 if(!client) {
                     AFB_ERROR("cannot find %s event, it seems that there was \
+                            no subscription", value);
+                    afb_req_fail_f(request, "failed", "cannot find %s event, it seems that there was \
                             no subscription", value);
                     return;
                 }
