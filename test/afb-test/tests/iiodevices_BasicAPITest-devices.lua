@@ -18,41 +18,31 @@
    NOTE: strict mode: every global variables should be prefixed by '_'
 --]]
 
+local devices = {"acceleration", "gyroscope", "compass"}
 local testPrefix ="iiodevices_BasicAPITest_without_devices_"
 
--- This tests the 'subscribe' verb of the iiodevices API without any devices
-_AFT.testVerbStatusError(testPrefix.."subscribe-compass","iiodevices","subscribe", {event = "compass", args = "xy"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-gyroscope","iiodevices","subscribe", {event = "gyroscope", args = "xy"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-acceleration","iiodevices","subscribe", {event = "acceleration", args = "abc"})
+for _, device in pairs(devices)
+do
+  -- This tests the 'subscribe' verb of the iiodevices API without any devices
+  _AFT.testVerbStatusError(testPrefix.."subscribe-"..device,"iiodevices","subscribe", {event = device, args = "xy"})
 
-_AFT.testVerbStatusError(testPrefix.."subscribe-acceleration-with-wrong-argument","iiodevices","subscribe", {event = "acceleration", args = "abc"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-acceleration-with-wrong-argument","iiodevices","subscribe", {event = "acceleration", aaaaaaaaaaaaaaaaaaaaa = "xy"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-compass-with-wrong-argument","iiodevices","subscribe", {event = "compass", bbbbbbbbbbbbbbbb = "xy"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-gyroscope-with-wrong-argument","iiodevices","subscribe", {event = "gyroscope", cccccccccccccccccc = "xy"})
+  _AFT.testVerbStatusError(testPrefix.."subscribe-"..device.."-with-tree-axes","iiodevices","subscribe", {event = device, args = "abc"})
 
-_AFT.testVerbStatusError(testPrefix.."subscribe-acceleration-replace-argument","iiodevices","subscribe", {event = "acceleration", args = "xy", wrongarg = "test"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-compass-replace-argument","iiodevices","subscribe", {event = "compass", args = "xy", wrongarg = "test"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-gyroscope-replace-argument","iiodevices","subscribe", {event = "gyroscope", args = "xy", wrongarg = "test"})
+  _AFT.testVerbStatusError(testPrefix.."subscribe-"..device.."-with-wrong-argument","iiodevices","subscribe", {event = device, aaaaaaaaaaaaaaaaaaaaa = "xy"})
 
-_AFT.testVerbStatusError(testPrefix.."subscribe-acceleration-edge-effect","iiodevices","subscribe", {event = "acceleration", args = "xy"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-compass-edge-effect","iiodevices","subscribe", {event = "compass", args = "xy"})
-_AFT.testVerbStatusError(testPrefix.."subscribe-gyroscope-edge-effect","iiodevices","subscribe", {event = "gyroscope", args = "xy"})
+  _AFT.testVerbStatusSuccess(testPrefix.."subscribe-"..device.."-replace-argument","iiodevices","subscribe", {event = device, args = "xy", wrongarg = "test"})
 
--- This tests the 'unsubscribe' verb of the iiodevices API without any devices
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-acceleration","iiodevices","unsubscribe", {event = "acceleration"})
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-compass","iiodevices","unsubscribe", {event = "compass"})
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-gyroscope","iiodevices","unsubscribe", {event = "gyroscope"})
+  _AFT.testVerbStatusError(testPrefix.."subscribe-"..device.."-edge-effect","iiodevices","subscribe", {event = device, args = "xy"})
 
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-acceleration-with-wrong-argument","iiodevices","unsubscribe", {event = "acceleration", aaaaaaaaaaaaaaaaaaaaa = "xy"})
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-compass-with-wrong-argument","iiodevices","unsubscribe", {event = "compass", bbbbbbbbbbbbbbbb = "xy"})
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-gyroscope-with-wrong-argument","iiodevices","unsubscribe", {event = "gyroscope", cccccccccccccccccc = "xy"})
 
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-acceleration-with-too-many-argument","iiodevices","unsubscribe", {event = "acceleration", args = "xy", wrongarg = "test"})
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-compass-with-too-many-argument","iiodevices","unsubscribe", {event = "compass", args = "xy", wrongarg = "test"})
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-gyroscope-with-too-many-argument","iiodevices","unsubscribe", {event = "gyroscope", args = "xy", wrongarg = "test"})
+  -- This tests the 'unsubscribe' verb of the iiodevices API without any devices
+  _AFT.testVerbStatusError(testPrefix.."unsubscribe-"..device.."","iiodevices","unsubscribe", {event = device})
 
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-acceleration-edge-effect","iiodevices","unsubscribe", {event = "acceleration"})
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-compass-edge-effect","iiodevices","unsubscribe", {event = "compass"})
-_AFT.testVerbStatusError(testPrefix.."unsubscribe-gyroscope-edge-effect","iiodevices","unsubscribe", {event = "gyroscope"})
+  _AFT.testVerbStatusError(testPrefix.."unsubscribe-"..device.."-with-wrong-argument","iiodevices","unsubscribe", {event = device, aaaaaaaaaaaaaaaaaaaaa = "xy"})
+
+  _AFT.testVerbStatusError(testPrefix.."unsubscribe-"..device.."-with-too-many-argument","iiodevices","unsubscribe", {event = device, args = "xy", wrongarg = "test"})
+
+  _AFT.testVerbStatusError(testPrefix.."unsubscribe-"..device.."-edge-effect","iiodevices","unsubscribe", {event = device})
+end
 
 _AFT.exitAtEnd()

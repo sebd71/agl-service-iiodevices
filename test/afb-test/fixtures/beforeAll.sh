@@ -20,45 +20,48 @@ set -e
 # limitations under the License.
 ###########################################################################
 
+#set SUDO variable
+SUDO=$(command -v sudo)
+
 # Init list
 
 list="acceleration gyroscope compass"
 
 # Configure iio_dummy
-modprobe industrialio
-modprobe industrialio-configfs
+"${SUDO}" modprobe industrialio
+"${SUDO}" modprobe industrialio-configfs
 
 if ! test -d "/sys/kernel/config"
 then
     mount -t configfs none /sys/kernel/config
 fi
 
-modprobe industrialio-sw-device
-modprobe industrialio-sw-trigger
-modprobe iio-trig-hrtimer
-modprobe iio_dummy
+"${SUDO}" modprobe industrialio-sw-device
+"${SUDO}" modprobe industrialio-sw-trigger
+"${SUDO}" modprobe iio-trig-hrtimer
+"${SUDO}" modprobe iio_dummy
 
 
 # create one iio_dummy
-for device in $list 
+for device in $list
 do
     if ! test -d "/sys/kernel/config/iio/triggers/hrtimer/instance_$device"
-    then 
-        mkdir -p "/sys/kernel/config/iio/triggers/hrtimer/instance_$device"
-    else 
+    then
+        "${SUDO}" mkdir -p "/sys/kernel/config/iio/triggers/hrtimer/instance_$device"
+    else
         echo "instance_$device was already created"
     fi
 
     if ! test -d "/sys/kernel/config/iio/devices/dummy/16-001d"
     then
-        mkdir -p "/sys/kernel/config/iio/devices/dummy/16-001d"
+        "${SUDO}" mkdir -p "/sys/kernel/config/iio/devices/dummy/16-001d"
     else
         echo "$device was already created"
     fi
 
     if ! test -d "/sys/kernel/config/iio/devices/dummy/16-006b"
     then
-        mkdir -p "/sys/kernel/config/iio/devices/dummy/16-006b"
+        "${SUDO}" mkdir -p "/sys/kernel/config/iio/devices/dummy/16-006b"
     else
         echo "$device was already created"
     fi
